@@ -106,12 +106,12 @@ insert into skill(study_group_id,name) values(#{study.id},#{skill.name})
 	update content set title=#{title}, contents=#{contents},  updated_time=now() where id=#{id}
 </update>
 
-<update id="updateStudy" parameterType="com.ons.study.dto.RecruitmentDTO" >
-	update study_group set name=#{study.name}, total_member=#{study.total_member}, recruit_period=#{study.recruit_period}, start_date=#{study.start_date}, end_date=#{study.end_date}  where id=#{study_group_id}
+<update id="updateStudy" parameterType="com.ons.study.dto.StudyDTO" >
+	update study_group set name="가가", total_member=#{total_member}, recruit_period=#{recruit_period}, start_date=#{start_date}, end_date=#{end_date}  where id=#{id}
 </update>
 
-<update id="updateSkill" parameterType="com.ons.study.dto.RecruitmentDTO" >
-	update skill set name=#{skill.name}  where study_group_id=#{study_group_id}
+<update id="updateSkill" parameterType="com.ons.study.dto.SkillDTO" >
+	update skill set name=#{name}  where study_group_id=#{study_group_id}
 </update>
 
 <update id="updateViewCount" parameterType="int">

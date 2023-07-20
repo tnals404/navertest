@@ -15,10 +15,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ons.study.dto.CommentDTO;
 import com.ons.study.dto.RecruitmentDTO;
+import com.ons.study.dto.SkillDTO;
+import com.ons.study.dto.StudyDTO;
 import com.ons.study.dto.UserDTO;
 import com.ons.study.service.QnAContentService;
 import com.ons.study.service.RecruitmentService;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jakarta.servlet.http.HttpSession;
 
 
@@ -43,8 +46,9 @@ public class RecruitmentController {
 	
 	
 	@RequestMapping("/recruit/recruitmentpostview")
-	public ModelAndView recruitmentpostview(@RequestParam(value="id", required=false, defaultValue="1") int id, Model model, HttpSession session) {
+	public ModelAndView recruitmentpostview(@RequestParam(value="id", required=false, defaultValue="1") int id, Model model, HttpSession session, @RequestParam(value="groupid", required=false, defaultValue="1") int groupid) {
 		addUserInfoToModel(model, session);
+		System.out.println(groupid);
 		RecruitmentDTO dto = service.recruitmentpostview(id);
 		RecruitmentDTO dto2 = service.recruitmentpostview2(id);
 		RecruitmentDTO dto3 = service.recruitmentpostview3(id);
@@ -54,6 +58,7 @@ public class RecruitmentController {
 		mv.addObject("postviewlist",dto);
 		mv.addObject("postviewlist2",dto2);
 		mv.addObject("postviewlist3",dto3);
+		mv.addObject("groupid",groupid);
 		mv.setViewName("recruitment/postview");	
 		return mv;
 	}
@@ -75,7 +80,7 @@ public class RecruitmentController {
 	
 	
 	@RequestMapping("/recruit/postviewedit")
-	public ModelAndView postviewedit(@RequestParam(value="id", required=false, defaultValue="1") int id) {
+	public ModelAndView postviewedit(@RequestParam(value="id", required=false, defaultValue="1") int id, @RequestParam(value="groupid", required=false, defaultValue="1") int groupid, HttpSession session) {
 		RecruitmentDTO dto = service.recruitmentpostview(id);
 		RecruitmentDTO dto2 = service.recruitmentpostview2(id);
 		RecruitmentDTO dto3 = service.recruitmentpostview3(id);
@@ -83,14 +88,27 @@ public class RecruitmentController {
 		mv.addObject("postviewlist",dto); //user
 		mv.addObject("postviewlist2",dto2); //skill
 		mv.addObject("postviewlist3",dto3); //study_group
+		mv.addObject("groupid",groupid);
 		mv.setViewName("recruitment/postviewedit");	
 		return mv;
 	}
 	
 	@PostMapping("/recruit/postviewedit")
-	public String editprocess(RecruitmentDTO dto) {
+	public String editprocess(RecruitmentDTO dto, HttpSession session) {
+		System.out.println(dto.getStudy_group_id());
+		StudyDTO study = new StudyDTO();
+		study.setId(dto.getStudy_group_id());
+		study.setEnd_date(dto.getStudy().getEnd_date());
+		study.setName(dto.getStudy().getName());
+		study.setRecruit_period(dto.getStudy().getRecruit_period());
+		study.setStart_date(dto.getStudy().getStart_date());
+		study.setTotal_member(dto.getStudy().getTotal_member());
+		SkillDTO skill = new SkillDTO();
+		skill.setStudy_group_id(dto.getStudy_group_id());
+		skill.setName(dto.getSkill().getName());
 		service.updateContent(dto);
-		service.updateSkill(dto);
+		service.updateSkill(skill);
+		service.updateStudy(study);
 		return "redirect:/recruitmentlist";
 	}
 	

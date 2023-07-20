@@ -77,7 +77,7 @@
 					<button id="delete" class="button ml10 pt5 pb5 pl20 pr20 fon-13"
 						onclick="document.location.href='/recruit/postviewdelete?groupid=${postviewlist.skill.study_group_id} &contentid=${ postviewlist.id}'">삭제</button>
 					<button id="modify" class="button ml10 pt5 pb5 pl20 pr20 fon-13"
-						onclick="document.location.href='/recruit/postviewedit?id=${postviewlist.id }'">수정</button>
+						onclick="document.location.href='/recruit/postviewedit?id=${postviewlist.id }&groupid=${groupid}'">수정</button>
 				</c:if>
 			</div>
 		</div>

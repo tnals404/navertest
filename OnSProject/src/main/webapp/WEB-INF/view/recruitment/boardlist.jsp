@@ -26,7 +26,7 @@
 	  </div>
       <div class="container">
         <c:forEach items="${boardlist }" var="dto">
-	        <div class="blog-list" class="link-box" onclick="document.location.href='/recruit/recruitmentpostview?id=${dto.id }'">
+	        <div class="blog-list" class="link-box" onclick="document.location.href='/recruit/recruitmentpostview?id=${dto.id }&groupid=${dto.study_group_id }'">
 	          <div class="blog-item">
 		          	<div class="badge fon-11 mb10 plus">${dto.skill.name }</div>
 		            <div class="blog-content plus">

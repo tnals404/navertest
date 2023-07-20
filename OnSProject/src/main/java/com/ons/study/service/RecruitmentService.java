@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ons.study.dto.CommentDTO;
 import com.ons.study.dto.RecruitmentDTO;
+import com.ons.study.dto.SkillDTO;
+import com.ons.study.dto.StudyDTO;
 
 
 public interface RecruitmentService {
@@ -15,6 +17,7 @@ public interface RecruitmentService {
 	public int deleteContent(int id);
 	public int deleteSkill(int id);
 	public int updateContent(RecruitmentDTO dto);
-	public int updateSkill(RecruitmentDTO dto);
+	public int updateSkill(SkillDTO skill);
+	public int updateStudy(StudyDTO study);
 	public int updateViewCount(int id);
 }

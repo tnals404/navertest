@@ -29,9 +29,9 @@
 	<!-- 파일첨부 <input type="file" id="file"></input><br>-->
 	<jsp:include page="../header.jsp" />
 	<br />
-	
 	<form action="/recruit/postviewedit" method="post" onsubmit="getText();">
-		<input type="hidden" name="study_group_id" value="${postviewlist3.study.id}">
+
+		<input type="hidden" name="study_group_id" value="${groupid }">
 		<input type="hidden" name="id" value="${postviewlist.id}">
 		<div id="wrap">
 			<div class="board-box pppp20">

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ons.study.dao.RecruitmentDAO;
 import com.ons.study.dto.RecruitmentDTO;
+import com.ons.study.dto.SkillDTO;
+import com.ons.study.dto.StudyDTO;
 
 @Service
 public class RecruitmentServiceImpl implements RecruitmentService {
@@ -67,9 +69,15 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 	}
 	
 	@Override
-	public int updateSkill(RecruitmentDTO dto) {
-		dao.updateStudy(dto);
-		return dao.updateSkill(dto);
+	public int updateSkill(SkillDTO skill) {
+		return dao.updateSkill(skill);
+	}
+	
+
+	@Override
+	public int updateStudy(StudyDTO study) {
+		// TODO Auto-generated method stub
+		return dao.updateStudy(study);
 	}
 
 	@Override

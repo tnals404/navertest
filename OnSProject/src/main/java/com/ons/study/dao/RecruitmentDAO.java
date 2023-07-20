@@ -6,10 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-
-
-import com.ons.study.dto.CommentDTO;
 import com.ons.study.dto.RecruitmentDTO;
+import com.ons.study.dto.SkillDTO;
 import com.ons.study.dto.StudyDTO;
 
 @Mapper
@@ -27,8 +25,8 @@ public interface RecruitmentDAO {
 	public int deleteStudyGroup(int id);
 	public int deleteSkill(int id);
 	public int updateContent(RecruitmentDTO dto);
-	public int updateStudy(RecruitmentDTO dto);
-	public int updateSkill(RecruitmentDTO dto);
+	public int updateStudy(StudyDTO study);
+	public int updateSkill(SkillDTO skill);
 	public int updateViewCount(int id);
 	
 	
