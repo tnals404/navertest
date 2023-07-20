@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<typeAliases>
+	<typeAlias type="com.ons.study.dto.MemberDTO" alias="memberdto"/>
+	<typeAlias type="com.ons.study.dto.QnAContentDTO" alias="qnacontentdto"/>
+	<typeAlias type="com.ons.study.dto.ReviewContentDTO" alias="reviewcontentdto"/>
+	<typeAlias type="com.ons.study.dto.RecruitmentDTO" alias="recruitmentdto"/>
+	<typeAlias type="com.ons.study.dto.CommentDTO" alias="commentdto"/>
+	<typeAlias type="com.ons.study.dto.UserDTO" alias="userdto"/>
+	<typeAlias type="com.ons.study.dto.TagDTO" alias="tagdto"/>
+</typeAliases>
+
+</configuration>
+

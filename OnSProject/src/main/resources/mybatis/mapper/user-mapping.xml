@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ons.study.dao.UserDAO">
+	<select id="isMember" resultType="int" parameterType="String">
+		select
+		count(*) from user where user_email=#{email} and password=#{password}
+	</select>
+
+	<resultMap id="UserDtoResultMap" type="userdto">
+		<id property="id" column="id" />
+		<result property="email" column="user_email" />
+		<result property="nickname" column="nickname" />
+		<result property="admin" column="admin" />
+	</resultMap>
+
+	<select id="getUserByEmailAndPassword"
+		resultMap="UserDtoResultMap">
+		SELECT id, user_email, nickname, admin
+		FROM user
+		WHERE
+		user_email=#{email} and password=#{password}
+	</select>
+
+	<insert id="insertUser" parameterType="userdto">
+		INSERT INTO user (user_email, password, nickname)
+		VALUES (#{email}, #{password}, #{nickname})
+	</insert>
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.ons.study.dao.ReviewContentDAO">
+
+<!-- 전체 리스트 조회 -->
+<select id="getTotalBoard" resultType="reviewcontentdto" >
+select * from content where board_type=4
+ order by created_time desc
+</select>
+
+<!-- 페이징 -->
+<select id="pagingBoard" parameterType="int" resultType="reviewcontentdto">
+	select * from content where board_type = 4 order by created_time desc limit
+	<foreach collection="array" item="num" separator=",">
+	#{num}
+	</foreach>
+</select>
+
+<!-- 게시글 조회 -->
+<select id="getOneBoard" parameterType="int" resultType="reviewcontentdto">
+select* from content where id=#{id} and board_type = 4
+</select>
+
+<!-- 게시글 작성: 작성자, board_type 수정 필요-->
+<insert id="writeBoard" parameterType="reviewcontentdto">
+	insert into content(user_id, title, contents, created_time, board_type, lecture_sitename, lecture_rating) 
+	values(#{user_id},#{title},#{contents},now(),4, #{lecture_sitename}, #{lecture_rating})
+</insert>
+
+<!-- 전체 게시글 수 조회 -->
+<select id="totalBoardCnt" resultType="int">
+select count(*) from content where board_type = 4
+</select> 
+
+<!-- 검색된 게시글 조회 -->
+<select id="searchBoard" parameterType="hashmap" resultType="reviewcontentdto">
+select*from content where ${colname} like #{colvalue} and board_type = 4
+order by created_time desc limit #{limitindex},#{limitcount}</select>
+
+<!-- 검색된 게시글 수 -->
+<select id="searchBoardCnt" parameterType="hashmap" resultType="int">
+	select count(*) from content where ${colname} like #{colvalue} and board_type = 4
+</select>
+
+<!-- 게시글 삭제 -->
+<delete id="deleteBoard" parameterType="int">
+	delete from content where id=#{id} and board_type = 4
+</delete>
+
+<!-- 조회수 증가 -->
+<update id="plusViewCount" parameterType="int">
+	update content set view_count=view_count+1 where id=#{id} and board_type = 4
+</update>
+
+<!-- 게시글 수정 -->
+<update id="updateBoard" parameterType="reviewcontentdto" >
+ update content set title=#{title}, lecture_sitename=#{lecture_sitename}, lecture_rating=#{lecture_rating}, contents=#{contents}, updated_time=now()
+ where id=#{id} and board_type = 4
+</update>
+
+<!-- 게시글 아이디로 작성자아이디 가져오기 -->
+<select id="getUserIdByContentId" parameterType="int">
+select user_id from content where id=#{id} and board_type = 4
+</select>
+
+
+
+<!-- 파일 업로드 -->
+
+</mapper>
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ons.study.dao.QnAContentDAO">
+
+<!-- qnacontentdto 매핑을 위한 resultMap 정의 -->
+<resultMap id="QnaContentDtoResultMap" type="qnacontentdto">
+    <id property="id" column="id" />
+    <result property="userId" column="user_id" />
+    <result property="title" column="title" />
+    <result property="contents" column="contents" />
+    <result property="createdTime" column="created_time" javaType="java.time.LocalDateTime" />
+    <result property="updatedTime" column="updated_time" javaType="java.time.LocalDateTime" />
+    <result property="solved" column="solved" />
+    <result property="viewCount" column="view_count" />
+    <result property="commentCount" column="comment_count" />
+    <result property="paths" column="path" javaType="java.lang.String" jdbcType="ARRAY" />
+    <result property="nickname" column="nickname" />
+    <result property="isDeleted" column="deleted" />
+</resultMap>
+
+<!-- 질문 게시판의 게시물을 페이지별로 조회하는 쿼리 -->
+<select id="getQnaContentByPage" resultMap="QnaContentDtoResultMap">
+    SELECT *, (SELECT COUNT(*) FROM comment WHERE content_id = c.id) AS comment_count
+    FROM content AS c
+    LEFT JOIN user AS u ON c.user_id = u.id
+    WHERE board_type = 2
+    ORDER BY created_time DESC
+    LIMIT #{startRow}, #{pageSize}
+</select>
+
+<select id="getQnaContentByTag" resultMap="QnaContentDtoResultMap">
+	SELECT *, (SELECT COUNT(*) FROM comment WHERE content_id = c.id) AS comment_count
+    FROM content AS c
+    LEFT JOIN user AS u ON c.user_id = u.id
+    WHERE board_type = 2 AND c.id IN (SELECT content_id FROM tag WHERE name = #{tagName})
+    ORDER BY created_time DESC
+    LIMIT #{startRow}, #{pageSize}
+</select>
+
+<select id="getQnaContentByKeyword" resultMap="QnaContentDtoResultMap">
+	SELECT *, (SELECT COUNT(*) FROM comment WHERE content_id = c.id) AS comment_count
+    FROM content AS c
+    LEFT JOIN user AS u ON c.user_id = u.id
+    WHERE board_type = 2 AND c.title LIKE CONCAT ('%', #{keyword}, '%') OR c.contents LIKE CONCAT ('%', #{keyword}, '%')
+    ORDER BY created_time DESC
+    LIMIT #{startRow}, #{pageSize}
+</select>
+
+<select id="getQnaContentById" resultMap="QnaContentDtoResultMap">
+    SELECT *, (SELECT COUNT(*) FROM comment WHERE content_id = c.id) AS comment_count
+    FROM content AS c
+    LEFT JOIN user AS u ON c.user_id = u.id
+    WHERE c.id = #{contentId}
+</select>
+
+<select id="getQnaContentTotalCount" resultType="long">
+	SELECT COUNT(*) FROM content WHERE board_type = 2;
+</select>
+
+<select id="getQnaContentCountByTag" resultType="long">
+	SELECT COUNT(*) FROM content
+	WHERE board_type = 2 AND id IN (SELECT content_id FROM tag WHERE name = #{tagName})
+</select>
+
+<select id="getQnaContentCountByKeyword" resultType="long">
+	SELECT COUNT(*) FROM content
+	WHERE board_type = 2 AND title LIKE CONCAT ('%', #{keyword}, '%') OR contents LIKE CONCAT ('%', #{keyword}, '%')
+</select>
+
+<select id="getTagsByContentId" resultType="String">
+    SELECT name
+    FROM tag
+    WHERE content_id = #{contentId}
+</select>
+
+<insert id="insertQnaContent" parameterType="qnacontentdto">
+	INSERT INTO content(user_id, title, contents, board_type)
+	VALUES (#{userId}, #{title}, #{contents}, 2)
+</insert>
+
+<update id="updateQnaContent" parameterType="qnacontentdto">
+	UPDATE content SET title = #{title}, contents = #{contents}, deleted = #{isDeleted}
+	WHERE id = #{id}
+</update>
+
+<select id="getLastContentIdByUser" resultType="long">
+	SELECT id
+	FROM content
+	WHERE user_id = #{userId}
+	ORDER BY created_time DESC
+	LIMIT 1
+</select>
+
+<delete id="deleteQnaContentById" parameterType="long">
+	DELETE FROM content
+	WHERE id = #{id}
+</delete>
+
+<update id="updateQnaContentViewCount" parameterType="long">
+	UPDATE content SET view_count = view_count + 1 WHERE id = #{contentId}
+</update>
+
+<update id="updateQnaContentSolved" parameterType="long">
+	UPDATE content SET solved = NOT solved WHERE id = #{contentId}
+</update>
+
+</mapper>
