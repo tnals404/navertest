@@ -109,7 +109,7 @@
 			<c:forEach items="${popular }" var="popular">
 			<div class="contentBox">
 				<p class="contentTitle">${popular.board_title }</p>
-				<div style="position: relative; width:274px; height:274px; overflow: hidden; background: white;">
+				<div style="position: relative; width:274px; height:250px; overflow: hidden; background: white;">
 					<img style="position: absolute; top:50%; left:50%; transform:translate(-50%,-50%);" src="${popular.board_imgurl }" width=274 />
 				</div>
 				<div class="content">

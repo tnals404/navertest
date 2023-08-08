@@ -107,5 +107,7 @@ public interface BoardDAO { //안휘주 작성
   	public int insertPointComment(PointDTO dto);
   	public int updateMemberPointComment(PointDTO dto);
   	
+  	//멤버 등급 이미지 가져오기
+  	public String getMemberGrdaeImg(String member_id);
 
 }

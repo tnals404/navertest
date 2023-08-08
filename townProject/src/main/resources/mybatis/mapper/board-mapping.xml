@@ -248,6 +248,12 @@
 	update member set point = point + #{point_get} where member_id = #{member_id}
 </update>
 
+<!-- 회원 등급 이미지 가져오기 -->
+<select id="getMemberGrdaeImg" parameterType="String" resultType="String">
+	select grade_image from grade g join member m
+	on g.grade_name = m.grade_name 
+	where member_id = #{member_id}
+</select>
 
 </mapper>
 

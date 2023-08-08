@@ -45,7 +45,7 @@ $(document).ready(function(){
 		if ("${param.ti}" !== "${sessionScope.town_id}") {
 			alert("게시글 작성은 회원님의 동네 게시판에서만 가능합니다.");
 		} else {
-			window.location.href = "/writingForm?ti=${param.ti}&ctgy=${param.ctgy}";
+			window.location.href = "/writingForm?ctgy=${param.ctgy}&ti=${param.ti}";
 		}
 	}); //onclick
 	

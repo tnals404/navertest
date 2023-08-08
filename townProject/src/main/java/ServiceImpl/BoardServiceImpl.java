@@ -203,4 +203,8 @@ public class BoardServiceImpl implements BoardService { //안휘주 작성
   		return dao.updateMemberPointComment(dto);
   	};
   	
+  	//멤버 등급 이미지 가져오기
+  	public String getMemberGrdaeImg(String member_id) {
+  		return dao.getMemberGrdaeImg(member_id);
+  	};
 }//class

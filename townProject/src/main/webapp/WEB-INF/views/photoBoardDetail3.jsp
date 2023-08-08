@@ -861,7 +861,7 @@ $(document).ready(function(){
 		<div id="oneboard_info">
 			<div id="oneboard_writerinfo">
 				<div id="oneboard_profileImg"><img src="${writerDto.profile_image}"></div>
-				<div id="oneboard_memberGrade"><img src="/img/star_3_yellow.svg"></div>
+				<div id="oneboard_memberGrade"><img src="${boardWriterGradeImg }"></div>
 				<div id="oneboard_writer">${detaildto.writer}</div>
 				<div class="yourInfo_btnBox">						
 					<input type="hidden" class="memId" value="${detaildto.writer}" />
@@ -971,7 +971,7 @@ $(document).ready(function(){
 									<img src="${commentWriterProfileMap[dto.comment_writer] }">
 								</div>
 								<div class="comment_info">
-									<div class="writer_memberGrade"><img src="/img/star_1_red.svg"></div>
+									<div class="writer_memberGrade"><img src="${commentWriterGradeImgMap[dto.comment_writer]}"></div>
 									<div class="comment_writer">${dto.comment_writer}</div>
 									<div class="yourInfo_btnBox" style="margin-left : 0px;">						
 										<input type="hidden" class="memId" value="${dto.comment_writer}" />

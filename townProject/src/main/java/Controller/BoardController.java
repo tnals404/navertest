@@ -105,7 +105,9 @@ public class BoardController { //안휘주 작성
 		BoardDTO dto = service.getDetail(board_id);
 		//글쓴사람 정보
 		MemberDTO writerDto = service.boardWriterProfile(dto.getWriter());
+		String boardWriterGradeImg = service.getMemberGrdaeImg(dto.getWriter());
 		
+		//댓글쓴사람들 정보
 		int commentCnt = service.getTotalCommentcnt(board_id);
 		List<CommentDTO> commentList = service.oneBoardComments(board_id);
 		HashMap<String, String> commentWriterProfileMap = new HashMap<String, String>();
@@ -117,6 +119,17 @@ public class BoardController { //안휘주 작성
 			MemberDTO commentWriterDto = service.boardWriterProfile(cmt.getComment_writer());
 			commentWriterProfileMap.put(cmt.getComment_writer(),commentWriterDto.getProfile_image() );				
 		}
+		//멤버등급이미지
+		HashMap<String, String> commentWriterGradeImgMap = new HashMap<String, String>();
+		for(CommentDTO cmt : commentList) {
+			//후에 댓글 삭제하면 작성자 정보 없음 -> 작성자 정보 없으면 건너뛰기
+			if(cmt.getComment_writer() == null || cmt.getComment_writer() == "") {
+				continue;
+			}
+			String commentWriterGradeImg = service.getMemberGrdaeImg(dto.getWriter());
+			commentWriterGradeImgMap.put(cmt.getComment_writer(), commentWriterGradeImg );				
+		}
+
 		//댓글 목록 불러오기
 		String str_bi = String.valueOf(board_id);
 		SearchDTO searchdto = new SearchDTO();
@@ -172,7 +185,9 @@ public class BoardController { //안휘주 작성
 		mv.addObject("boardName", dto.getBoard_name_inner());
 		mv.addObject("ti", dto.getTown_id());
 		mv.addObject("writerDto", writerDto);
+		mv.addObject("boardWriterGradeImg", boardWriterGradeImg);
 		mv.addObject("commentWriterProfileMap", commentWriterProfileMap);				
+		mv.addObject("commentWriterGradeImgMap", commentWriterGradeImgMap);
 		mv.addObject("commentCnt", commentCnt );
 		mv.addObject("searchdto", searchdto);
 		mv.addObject("response", list);
