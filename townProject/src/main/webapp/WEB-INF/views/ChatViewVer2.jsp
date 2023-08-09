@@ -302,6 +302,7 @@ body {
 		<div class="chat-header">
 	    	<span id="exitButton" style="margin-right: auto; padding: 0px 10px; cursor: pointer;">
         		<img style="height: 15px;" src="img/뒤로가기버튼.png">
+        		&nbsp&nbsp1:1채팅
     		</span>
     		
     		

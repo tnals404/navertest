@@ -220,7 +220,7 @@ $(document).ready(function(){
 	 <div id="board_name">
 			${boardName}
 	</div>
-	<div id="top_btnBox"><input type="button" id="writeBtn" value="글쓰기"></div>
+	<!-- <div id="top_btnBox"><input type="button" id="writeBtn" value="글쓰기"></div> -->
 	
 	<div id="board_page">
 		<c:forEach items="${response.list}" var="dto" varStatus="status">
@@ -234,8 +234,8 @@ $(document).ready(function(){
 							<div class="reaction1" style="color : red;">${dto.good_cnt }</div>					
 						</div>
 						<div class="reaction2">
-							<img class="reaction2" src="/img/Chat Bubble.svg">
-							<div class="reaction2">${boardCommentCnt[dto.board_id] }</div>
+							<%-- <img class="reaction2" src="/img/Chat Bubble.svg">
+							<div class="reaction2">${boardCommentCnt[dto.board_id] }</div> --%>
 						</div>
 					</div>
 					<div class="one_title">
@@ -245,7 +245,7 @@ $(document).ready(function(){
 						<div class="one_photoWriter">작성자 : ${dto.writer }</div>
 	 					<div class="one_writingTime">
 							<!-- 오늘 날짜랑 같으면 시간만 출력, 날짜 다르면 년월일 출력 / 댓글 수정했으면 수정시간 표시 -->
-							<jsp:useBean id="now" class="java.util.Date" />
+						<jsp:useBean id="now" class="java.util.Date" />
 							<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowDate" />
 							<c:choose>
 							 	<c:when test="${dto.update_time != null}">
@@ -264,7 +264,7 @@ $(document).ready(function(){
 							 	<c:otherwise>
 									${regDate}
 							 	</c:otherwise>
-							</c:choose> 										
+							</c:choose>								
 						</div>
 					</div>
 				</div>

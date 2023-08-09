@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>동네일보 게시판</title>
 <script src="/js/jquery-3.6.4.min.js"></script>
 <link rel="stylesheet" href="/css/BoardCommon.css" />
 <link rel="stylesheet" href="/css/BoardDetail.css" />
@@ -149,7 +149,11 @@ $(document).ready(function(){
 	 					'comment_imgurl' : $("#comment_img_preview").attr("src"),
 	 				},
 	 				success : function(response){ 
-	 					if(response > 0) {
+	 					if(response.insertResult > 0 ) {
+	 						alert("댓글 작성이 완료되었습니다. 포인트 3점이 지급되었습니다.");
+	 						if (response.gradeUpResult) {
+	 							alert("축하드립니다! 회원 등급이 올랐습니다.");
+	 						}
 	 						location.reload(); //현재 페이지 새로고침
 	 					}
 	 				}, 
@@ -169,7 +173,11 @@ $(document).ready(function(){
 	 					'comment_contents' : text,
 	 				},
 	 				success : function(response){ 
-	 					if(response > 0) {
+	 					if(response.insertResult > 0 ) {
+	 						alert("댓글 작성이 완료되었습니다. 포인트 3점이 지급되었습니다.");
+	 						if (response.gradeUpResult) {
+	 							alert("축하드립니다! 회원 등급이 올랐습니다.");
+	 						}
 	 						location.reload(); //현재 페이지 새로고침
 	 					}
 	 				}, 
@@ -790,25 +798,22 @@ $(document).ready(function(){
 		open("/commentReportForm?ci="+commentId , "신고하기", "width=540px, height=530px, top=200px, left=800px, scrollbars=no");
 	});//댓글 신고
 	
-	//그룹채팅생성(일단 bi값 넘기는것만 확인)
+	//그룹채팅생성
 	$("#open_groupChat_btn").on('click', function(){
 		let bi = "${detaildto.board_id}";
-		alert("board_id = " + bi);		
-		//open("/gchatstart?board_id="+bi , "그룹채팅", "width=400px, height=650px, top=200px, left=800px, scrollbars=no");	
-		//open("/entergchat?board_id="+bi , "그룹채팅", "width=400px, height=650px, top=200px, left=800px, scrollbars=no");	
+		open("/gchatstart?board_id="+bi , "그룹채팅", "width=400px, height=650px, top=200px, left=800px, scrollbars=no");	
+		location.reload();
 	});
 	
-	//그룹채팅참가(일단 bi값 넘기는것만 확인)
+	//그룹채팅참가
 	$("#join_groupChat_btn").on('click', function(){
 		let bi = "${detaildto.board_id}";
-		alert("board_id = " + bi);		
 		open("/entergchat?board_id="+bi , "그룹채팅", "width=400px, height=650px, top=200px, left=800px, scrollbars=no");	
 	});
 	
-	//채팅생성
+	//개인채팅생성
 	$(".chatTo_btn").on('click', function(){
 		let memberId = $(this).prevAll(".memId").val();
-		//alert("member Id = " + memberId);
 		open("/chatstart?touser_id="+memberId , "일대일채팅", "width=400px, height=650px, top=200px, left=800px, scrollbars=no");	
 	});
 	
@@ -832,8 +837,15 @@ $(document).ready(function(){
 			<!-- 소모임 게시판만 채팅버튼 나오도록 -->
 			<c:if test="${boardName == '같이해요 소모임'}">
 				<c:choose>
-					<c:when test="${detaildto.writer == member_id }">										
-						<input type="button" id="open_groupChat_btn" class="groupChatBtn" value="채팅 생성" />
+					<c:when test="${detaildto.writer == member_id }">
+						<c:choose>
+							<c:when test="${gchatResult == 0 }">
+						        <input type="button" id="open_groupChat_btn" class="groupChatBtn" value="채팅 생성" />
+							</c:when>
+							<c:otherwise>
+								<input type="button" id="join_groupChat_btn" class="groupChatBtn" value="채팅 참여" />
+							</c:otherwise>							
+						</c:choose>
 					</c:when>
 					<c:otherwise>
 						<input type="button" id="join_groupChat_btn" class="groupChatBtn" value="채팅 참여" />
@@ -861,17 +873,24 @@ $(document).ready(function(){
 		<div id="oneboard_info">
 			<div id="oneboard_writerinfo">
 				<div id="oneboard_profileImg"><img src="${writerDto.profile_image}"></div>
-				<div id="oneboard_memberGrade"><img src="${boardWriterGradeImg }"></div>
-				<div id="oneboard_writer">${detaildto.writer}</div>
-				<div class="yourInfo_btnBox">						
-					<input type="hidden" class="memId" value="${detaildto.writer}" />
-					<input type="button" class="yourInfo_btn" value="회원정보" />
-					<hr style="margin:2px 0px;">
-					<input type="button" class="chatTo_btn" value="채팅하기" />
-				</div>
-				<div class="myInfo_btnBox">						
-					<input type="button" class="myInfo_btn" value="내정보" />
-				</div>
+				<c:choose>
+					<c:when test="${boardName == '공지사항'}">
+						<div id="oneboard_writer_admin">관리자</div>
+					</c:when>
+					<c:otherwise>
+						<div id="oneboard_memberGrade"><img src="${boardWriterGradeImg }"></div>
+						<div id="oneboard_writer">${detaildto.writer}</div>
+						<div class="yourInfo_btnBox">						
+							<input type="hidden" class="memId" value="${detaildto.writer}" />
+							<input type="button" class="yourInfo_btn" value="회원정보" />
+							<hr style="margin:2px 0px;">
+							<input type="button" class="chatTo_btn" value="채팅하기" />
+						</div>
+						<div class="myInfo_btnBox">						
+							<input type="button" class="myInfo_btn" value="내정보" />
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<div class="info" id="view_cnt">조회 ${detaildto.view_cnt}</div>
 			<div class="info" id="writingtime">

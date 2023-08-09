@@ -30,7 +30,7 @@ $(document).ready(function() {
         
         var message = data.message;
         var sender = data.sender;
-        var gmessageid = data.gmessageid;
+        var gmessageid = Number(data.gmessageid);
         var user = '<%= (String)session.getAttribute("member_id") %>';
         
         if (sender == user) {
@@ -92,7 +92,7 @@ $(document).ready(function() {
                     console.log("온 data값: " + response);
                     $("#messageInput").val("");
                     chatArea.scrollTop(chatArea.prop("scrollHeight"));
-                    
+                    location.reload();
                     data.gmessageid = response;
                     websocket.send(JSON.stringify(data));
                 },
@@ -306,6 +306,7 @@ body {
 		<div class="chat-header">
 	    	<span id="exitButton" style="margin-right: auto; padding: 0px 10px; cursor: pointer;">
         		<img style="height: 15px;" src="img/뒤로가기버튼.png">
+        		&nbsp&nbsp${chatroom_name }
     		</span>
     		
 
