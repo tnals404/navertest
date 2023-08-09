@@ -221,7 +221,7 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-<jsp:include page="Header.jsp" />
+<jsp:include page="AdminHeader.jsp" />
 <div id="myPage_layout">
 <jsp:include page="adminMenu.jsp" />
 	

@@ -11,7 +11,7 @@
 $(document).ready(function() {
     
 	var websocket;
-    websocket = new WebSocket("ws://localhost:8091/chatws");
+    websocket = new WebSocket("ws://http://118.67.128.212:8080/chatws");
     websocket.onopen = function() {
         console.log("웹소캣 연결 성공");
         var chatArea = $("#chatArea");

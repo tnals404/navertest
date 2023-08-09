@@ -122,6 +122,7 @@ public class SignController {
 				return "redirect:/main" ;
 			}
 	}
+		
 		session.setAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
 		session.setAttribute("url", "/");
 		return "redirect:/alert";
@@ -419,9 +420,8 @@ public class SignController {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
 		String mail = "kakaoclone@naver.com";
-		String mail2= "towncommunity@naver.com";
 		try {
-			helper.setFrom(mail2);
+			helper.setFrom(mail);
 			helper.setTo(email);
 			
 			helper.setSubject("인증번호 입력을 위한 메일 전송");
@@ -452,7 +452,7 @@ public class SignController {
 		int numIndex=random.nextInt(99999)+10000; 
 		key+=numIndex;
 		message.setSubject("임시비밀번호을 위한 메일 전송");
-		message.setText("[동네일보] : "+key);
+		message.setText("[동네일보] 임시비밀번호는: "+key+"입니다.");
 		message.setFrom("kakaoclone@naver.com");
 		javaMailSender.send(message);
 		
