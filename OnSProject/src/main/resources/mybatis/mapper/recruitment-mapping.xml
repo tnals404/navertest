@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ons.study.dao.RecruitmentDAO">
+
+<resultMap type="com.ons.study.dto.RecruitmentDTO" id="recruitmentmap">
+	<id property="id" column="c_id"/>
+	<result property="user_id" column="user_id"/>
+	<result property="title" column="title"/>
+	<result property="contents" column="contents"/>
+	<result property="created_time" column="created_time"/>
+	<result property="updated_time" column="updated_time"/>
+	<result property="board_type" column="board_type"/>
+	<result property="like" column="like"/>
+	<result property="view_count" column="view_count"/>
+	<result property="study_group_id" column="study_group_id"/>
+	<collection property="study" resultMap="studyMap"></collection>
+	<collection property="skill" resultMap="skillMap"></collection>
+	<collection property="user" resultMap="userMap"></collection>
+<!-- 	<collection property="member" resultMap="memberMap"></association> -->
+</resultMap>
+
+
+<resultMap type="com.ons.study.dto.SkillDTO" id="skillMap">
+	<id property="study_group_id" column="study_group_id"/>
+	<result property="id" column="s_id"/>
+	<result property="name" column="s_name"/>
+</resultMap>
+
+<select id="recruitmentList" resultMap="recruitmentmap"  parameterType="String">
+	select g.id as g_id, s.name as s_name, g.name as g_name, recruit_period, start_date, end_date, total_member, s.study_group_id, c.id as c_id, s.id as s_id, user_id, title, contents, created_time, updated_time, board_type, `like`, u.nickname,
+		   view_count
+	from(
+		select * from skill where 1=1 
+		<if test="name != ''">
+			and name = #{name}
+		</if>
+        ) s join study_group g on s.study_group_id = g.id 
+        join content c on s.study_group_id = c.study_group_id and c.board_type =1
+        join user u on c.user_id = u.id order by c.created_time desc
+</select>
+
+<resultMap type="com.ons.study.dto.StudyDTO" id="studyMap">
+	<id property="id" column="s_id"/>
+	<result property="name" column="g_name"/>
+	<result property="recruit_period" column="recruit_period"/>
+	<result property="start_date" column="start_date"/>
+	<result property="end_date" column="end_date"/>
+	<result property="total_member" column="total_member"/>
+</resultMap>
+
+<resultMap type="com.ons.study.dto.UserDTO" id="userMap">
+	<id property="id" column="u_id"/>
+	<result property="email" column="user_email"/>
+	<result property="password" column="password"/>
+	<result property="nickname" column="nickname"/>
+</resultMap>
+
+<select id="recruitmentpostview" resultMap="recruitmentmap"  parameterType="int">
+select c.id as c_id, u.id as u_id, c.user_id, title, contents, created_time, updated_time, board_type, `like`,
+ view_count, user_email, password, nickname, c.study_group_id
+from content c
+inner join user u on c.user_id = u.id where c.board_type =1 and c.id=#{id}
+</select>
+
+<select id="recruitmentpostview2" resultMap="recruitmentmap"  parameterType="int">
+select c.id as c_id, s.id as s_id, user_id, title, contents, created_time, updated_time, board_type, `like`,
+ view_count, s.study_group_id, s.name as s_name
+from content c
+inner join skill s on c.study_group_id = s.study_group_id where c.board_type =1 and c.id=#{id}
+</select>
+
+<select id="recruitmentpostview3" resultMap="recruitmentmap"  parameterType="int">
+select c.id as c_id, g.id as g_id, user_id, title, contents, created_time, updated_time, board_type, `like`,
+ view_count, g.name as g_name, recruit_period, start_date, end_date, total_member
+from content c
+inner join study_group g on c.study_group_id = g.id where c.board_type =1 and c.id=#{id}
+</select>
+
+<insert id="insertStudyGroup" parameterType="com.ons.study.dto.StudyDTO" useGeneratedKeys="true" keyProperty="id">
+<!-- insert into study_group(name ,recruit_period, start_date, end_date, total_member) values(#{study.name}, #{study.recruit_period}, #{study.start_date}, #{study.end_date}, #{study.total_member}) -->
+insert into study_group(name ,recruit_period, start_date, end_date, total_member) values(#{name}, #{recruit_period}, #{start_date}, #{end_date}, #{total_member})
+</insert>
+
+<insert id="insertContent" parameterType="com.ons.study.dto.RecruitmentDTO" >
+insert into content(user_id ,title, contents, board_type, study_group_id) values(#{user_id}, #{title}, #{contents}, 1, #{study.id})
+</insert>
+
+<insert id="insertSkill" parameterType="com.ons.study.dto.RecruitmentDTO" >
+insert into skill(study_group_id,name) values(#{study.id},#{skill.name})
+</insert>
+
+<delete id="deleteContent" parameterType="int">
+	delete from content where id= #{id}
+</delete>
+
+<delete id="deleteStudyGroup" parameterType="int">
+	delete from study_group where id=#{id}
+</delete>
+
+<delete id="deleteSkill" parameterType="int">
+	delete from skill where study_group_id=#{study_group_id}
+</delete>
+
+<update id="updateContent" parameterType="com.ons.study.dto.RecruitmentDTO" >
+	update content set title=#{title}, contents=#{contents},  updated_time=now() where id=#{id}
+</update>
+
+<update id="updateStudy" parameterType="com.ons.study.dto.StudyDTO" >
+	update study_group set name=#{name}, total_member=#{total_member}, recruit_period=#{recruit_period}, start_date=#{start_date}, end_date=#{end_date}  where id=#{id}
+</update>
+
+<update id="updateSkill" parameterType="com.ons.study.dto.SkillDTO" >
+	update skill set name=#{name}  where study_group_id=#{study_group_id}
+</update>
+
+<update id="updateViewCount" parameterType="int">
+	update content set view_count = view_count+1 where id=#{id}
+</update>
+
+
+
+
+
+</mapper>
